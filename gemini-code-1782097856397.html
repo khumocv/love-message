@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для одной особенной девушки</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Нежная, эстетичная палитра */
+            --bg-gradient: linear-gradient(135deg, #fdf8f5 0%, #f7ebe1 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --accent-color: #e56b6f;
+            --tech-color: #6b705c; /* Мягкий оливково-серый для "кода" вместо ядовито-зеленого */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: background 1.5s ease;
+        }
+
+        /* Элегантная карточка-открытка */
+        .container {
+            width: 90%;
+            max-width: 480px;
+            min-height: 460px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 45px 35px;
+            box-shadow: 0 20px 40px rgba(180, 160, 150, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Экраны */
+        .screen {
+            display: none;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Мягкий светлый "терминал" */
+        .terminal-text {
+            font-family: monospace;
+            color: var(--tech-color);
+            text-align: left;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 35px;
+            background: rgba(0, 0, 0, 0.02);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        /* Заголовки */
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .story-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+        }
+
+        /* Поле ввода */
+        .input-group {
+            margin: 30px 0;
+        }
+
+        .name-input {
+            width: 85%;
+            padding: 14px 22px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px;
+            font-size: 16px;
+            color: var(--text-main);
+            text-align: center;
+            outline: none;
+            transition: all 0.3s;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .name-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(229, 107, 111, 0.15);
+        }
+
+        /* Красивые кнопки */
+        .btn {
+            font-family: 'Inter', sans-serif;
+            padding: 14px 38px;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .next-btn {
+            background-color: var(--text-main);
+            color: #ffffff;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-group {
+            margin-top: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            height: 100px;
+            position: relative;
+        }
+
+        .yes-btn {
+            background: var(--accent-color);
+            color: white;
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(229, 107, 111, 0.2);
+        }
+
+        .no-btn {
+            background: #edf2f7;
+            color: #718096;
+            position: absolute;
+            left: 55%;
+        }
+
+        .heart-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .signature {
+            font-family: 'Caveat', cursive;
+            font-size: 40px;
+            color: var(--accent-color);
+            margin-top: 20px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        
+        <div id="screen1" class="screen active">
+            <div class="terminal-text" id="terminal"></div>
+            <button class="btn next-btn" id="startBtn" style="opacity: 0; transition: opacity 0.3s;" onclick="changeScreen('screen1', 'screen2')">Открыть проект</button>
+        </div>
+
+        <div id="screen2" class="screen">
+            <h2 class="serif-title">Доступ к посланию</h2>
+            <p style="color: var(--text-muted);">Пожалуйста, введи своё имя для генерации персональной страницы:</p>
+            <div class="input-group">
+                <input type="text" id="userName" class="name-input" placeholder="Твоё имя..." autocomplete="off">
+            </div>
+            <button class="btn next-btn" onclick="saveNameAndGo()">Продолжить</button>
+        </div>
+
+        <div id="screen3" class="screen">
+            <h2 class="serif-title">Кое-что важное...</h2>
+            <p class="story-text">
+                Знаешь, <span id="dynamicName" style="color: var(--accent-color); font-weight: 600;"></span>, как программист я привык, что всё вокруг работает по строгим правилам и законам логики. Но когда я общаюсь с тобой, вся моя логика отключается. Ты удивительная. Твоя улыбка, твой смех, то, как легко и тепло становится рядом... Я понял, что больше не хочу быть просто другом.
+            </p>
+            <button class="btn next-btn" onclick="changeScreen('screen3', 'screen4')">Дальше</button>
+        </div>
+
+        <div id="screen4" class="screen">
+            <div class="heart-icon">✨❤️✨</div>
+            <h2 class="serif-title">Ты станешь моей девушкой?</h2>
+            <p style="color: var(--text-muted); font-size: 15px;">Я обещаю ценить каждый наш момент и делать тебя счастливой.</p>
+            
+            <div class="btn-group" id="btnGroup">
+                <button class="btn yes-btn" id="yesBtn" onclick="celebrate()">Да!</button>
+                <button class="btn no-btn" id="noBtn">Нет</button>
+            </div>
+        </div>
+
+        <div id="screen5" class="screen">
+            <div class="heart-icon">🥰</div>
+            <h2 class="serif-title" style="color: var(--accent-color); font-size: 32px;">Это самый лучший ответ!</h2>
+            <p style="font-size: 16px; line-height: 1.6; color: var(--text-muted);">
+                Моя система официально перезагружена счастьем. <br>Жду тебя в ЛС с улыбкой!
+            </p>
+            <div class="signature">Твой программист</div>
+        </div>
+
+    </div>
+
+    <script>
+        // Элегантные, спокойные логи загрузки
+        const lines = [
+            "connecting to heart_database...",
+            "checking permissions... [granted]",
+            "loading beautiful_moments_module... [100%]",
+            "personal data ready for decryption."
+        ];
+        let lineIndex = 0;
+        const terminal = document.getElementById('terminal');
+        
+        function typeTerminal() {
+            if (lineIndex < lines.length) {
+                terminal.innerHTML += "> " + lines[lineIndex] + "<br>";
+                lineIndex++;
+                setTimeout(typeTerminal, 600);
+            } else {
+                document.getElementById('startBtn').style.opacity = '1';
+            }
+        }
+        window.onload = typeTerminal;
+
+        function changeScreen(fromId, toId) {
+            const fromScreen = document.getElementById(fromId);
+            const toScreen = document.getElementById(toId);
+            fromScreen.classList.remove('active');
+            setTimeout(() => {
+                fromScreen.style.display = 'none';
+                toScreen.style.display = 'block';
+                setTimeout(() => toScreen.classList.add('active'), 50);
+            }, 500);
+        }
+
+        function saveNameAndGo() {
+            const nameInput = document.getElementById('userName').value.trim();
+            if (!nameInput) {
+                alert("Пожалуйста, введи своё имя! ✨");
+                return;
+            }
+            document.getElementById('dynamicName').innerText = nameInput;
+            changeScreen('screen2', 'screen3');
+        }
+
+        // Кнопка "Нет" убегает и уменьшается, "Да" — растет
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const group = document.getElementById('btnGroup');
+        let scaleYes = 1;
+        let scaleNo = 1;
+
+        function moveNo() {
+            const maxX = group.clientWidth - noBtn.clientWidth;
+            const maxY = group.clientHeight - noBtn.clientHeight;
+            const randomX = Math.max(5, Math.floor(Math.random() * maxX));
+            const randomY = Math.floor(Math.random() * maxY) - 15;
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            scaleYes += 0.15;
+            scaleNo -= 0.1;
+            yesBtn.style.transform = `scale(${scaleYes})`;
+            
+            if (scaleNo > 0.2) {
+                noBtn.style.transform = `scale(${scaleNo})`;
+            } else {
+                noBtn.style.display = 'none';
+            }
+        }
+        noBtn.addEventListener('mouseenter', moveNo);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNo(); });
+
+        function celebrate() {
+            changeScreen('screen4', 'screen5');
+            // Переход на еще более теплый романтичный цвет в конце
+            document.body.style.background = "linear-gradient(135deg, #ffeef2 0%, #ffcbd7 100%)";
+            document.getElementById('mainContainer').style.background = "rgba(255, 255, 255, 0.92)";
+        }
+    </script>
+</body>
+</html>
